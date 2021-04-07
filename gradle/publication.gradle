@@ -22,7 +22,7 @@ publishing {
             artifact javadocJar
             pom {
                 name = project.name
-                description = 'GraphQL query builder for Java'
+                description = 'Common lang for Java'
                 url = "https://github.com/qwlabs/${project.name}"
                 licenses {
                     license {

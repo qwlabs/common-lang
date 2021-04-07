@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'org.ajoberstar.grgit' apply false
 }
 
 repositories {
@@ -7,17 +8,11 @@ repositories {
     mavenCentral()
     jcenter()
     maven { url 'https://maven.aliyun.com/repository/public' }
-    dependencies {
-        compile("org.ajoberstar.grgit:grgit-core:${grgitVersion}")
-    }
 }
-
-
-group 'com.qwlabs'
-version '0.1'
 
 apply from: "gradle/check.gradle"
 apply from: "gradle/publication.gradle"
+apply from: "gradle/version.gradle"
 apply from: "gradle/reversion.gradle"
 
 java {
@@ -41,5 +36,6 @@ dependencies {
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    testImplementation("org.mockito:mockito-junit-jupiter:${mockitoVersion}")
     testImplementation("org.hamcrest:hamcrest-all:${hamcrestVersion}")
 }

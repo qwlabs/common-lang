@@ -6,7 +6,7 @@ on:
 env:
   COMMIT_OWNER: ${{ github.event.pusher.name }}
   COMMIT_SHA: ${{ github.sha }}
-
+  PIPELINE_ID: ${{ github.run_number }}
 
 jobs:
   build_jdk_11:

@@ -6,9 +6,15 @@ public final class F2 {
     private F2() {
     }
 
-    public static <E> void ifNotPresent(E value, Consumer<E> consumer) {
+    public static <E> void ifEmpty(E value, EmptyConsumer consumer) {
         if (value == null) {
-            consumer.accept(null);
+            consumer.accept();
+        }
+    }
+
+    public static <E> void ifPresent(E value, EmptyConsumer consumer) {
+        if (value != null) {
+            consumer.accept();
         }
     }
 
