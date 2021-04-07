@@ -15,7 +15,7 @@ Useful java tools
 <dependency>
     <groupId>com.qwlabs</groupId>
     <artifactId>common-lang</artifactId>
-    <version>0.1.*</version>
+    <version>0.1.2</version>
     <type>pom</type>
 </dependency>
 ```
@@ -23,7 +23,7 @@ Useful java tools
 ## Gradle
 
 ```gradle
-implementation 'com.qwlabs:common-lang:0.1.*'
+implementation 'com.qwlabs:common-lang:0.1.2'
 ```
 
 # Usage see test
