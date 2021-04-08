@@ -11,7 +11,6 @@ env:
 jobs:
   deploy_artifacts:
     name: Deploy Artifacts
-    needs: [build_jdk_11, snapshot_tests]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
