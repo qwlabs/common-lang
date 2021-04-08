@@ -221,15 +221,15 @@ class C2Test {
         when(mapper8.apply(map)).thenReturn("8");
 
 
-        Optional<String> result1 = C2.ifNotEmpty((Collection<String>) null, mapper1);
-        Optional<String> result2 = C2.ifNotEmpty((Map<String, String>) null, mapper2);
-        Optional<String> result3 = C2.ifNotEmpty(Set.of(), mapper3);
-        Optional<String> result4 = C2.ifNotEmpty(List.of(), mapper4);
-        Optional<String> result5 = C2.ifNotEmpty(Map.of(), mapper5);
+        Optional<String> result1 = C2.mapNotEmpty((Collection<String>) null, mapper1);
+        Optional<String> result2 = C2.mapNotEmpty((Map<String, String>) null, mapper2);
+        Optional<String> result3 = C2.mapNotEmpty(Set.of(), mapper3);
+        Optional<String> result4 = C2.mapNotEmpty(List.of(), mapper4);
+        Optional<String> result5 = C2.mapNotEmpty(Map.of(), mapper5);
 
-        Optional<String> result6 = C2.ifNotEmpty(set, mapper6);
-        Optional<String> result7 = C2.ifNotEmpty(list, mapper7);
-        Optional<String> result8 = C2.ifNotEmpty(map, mapper8);
+        Optional<String> result6 = C2.mapNotEmpty(set, mapper6);
+        Optional<String> result7 = C2.mapNotEmpty(list, mapper7);
+        Optional<String> result8 = C2.mapNotEmpty(map, mapper8);
 
         assertTrue(result1.isEmpty());
         assertTrue(result2.isEmpty());
@@ -271,15 +271,15 @@ class C2Test {
         when(supplier8.get()).thenReturn("8");
 
 
-        Optional<String> result1 = C2.ifNotEmpty((Collection<String>) null, supplier1);
-        Optional<String> result2 = C2.ifNotEmpty((Map<String, String>) null, supplier2);
-        Optional<String> result3 = C2.ifNotEmpty(Set.of(), supplier3);
-        Optional<String> result4 = C2.ifNotEmpty(List.of(), supplier4);
-        Optional<String> result5 = C2.ifNotEmpty(Map.of(), supplier5);
+        Optional<String> result1 = C2.mapNotEmpty((Collection<String>) null, supplier1);
+        Optional<String> result2 = C2.mapNotEmpty((Map<String, String>) null, supplier2);
+        Optional<String> result3 = C2.mapNotEmpty(Set.of(), supplier3);
+        Optional<String> result4 = C2.mapNotEmpty(List.of(), supplier4);
+        Optional<String> result5 = C2.mapNotEmpty(Map.of(), supplier5);
 
-        Optional<String> result6 = C2.ifNotEmpty(set, supplier6);
-        Optional<String> result7 = C2.ifNotEmpty(list, supplier7);
-        Optional<String> result8 = C2.ifNotEmpty(map, supplier8);
+        Optional<String> result6 = C2.mapNotEmpty(set, supplier6);
+        Optional<String> result7 = C2.mapNotEmpty(list, supplier7);
+        Optional<String> result8 = C2.mapNotEmpty(map, supplier8);
 
         assertTrue(result1.isEmpty());
         assertTrue(result2.isEmpty());
