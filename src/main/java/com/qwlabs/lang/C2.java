@@ -77,28 +77,28 @@ public final class C2 {
         }
     }
 
-    public static <E, C extends Collection<E>, R> Optional<R> ifNotEmpty(C c, Supplier<R> supplier) {
+    public static <E, C extends Collection<E>, R> Optional<R> mapNotEmpty(C c, Supplier<R> supplier) {
         if (isNotEmpty(c)) {
             return Optional.ofNullable(supplier.get());
         }
         return Optional.empty();
     }
 
-    public static <K, V, M extends Map<K, V>, R> Optional<R> ifNotEmpty(M map, Supplier<R> supplier) {
+    public static <K, V, M extends Map<K, V>, R> Optional<R> mapNotEmpty(M map, Supplier<R> supplier) {
         if (isNotEmpty(map)) {
             return Optional.ofNullable(supplier.get());
         }
         return Optional.empty();
     }
 
-    public static <E, C extends Collection<E>, R> Optional<R> ifNotEmpty(C c, Function<C, R> mapper) {
+    public static <E, C extends Collection<E>, R> Optional<R> mapNotEmpty(C c, Function<C, R> mapper) {
         if (isNotEmpty(c)) {
             return Optional.ofNullable(mapper.apply(c));
         }
         return Optional.empty();
     }
 
-    public static <K, V, M extends Map<K, V>, R> Optional<R> ifNotEmpty(M map, Function<M, R> mapper) {
+    public static <K, V, M extends Map<K, V>, R> Optional<R> mapNotEmpty(M map, Function<M, R> mapper) {
         if (isNotEmpty(map)) {
             return Optional.ofNullable(mapper.apply(map));
         }
