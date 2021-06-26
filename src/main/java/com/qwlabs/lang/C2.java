@@ -1,11 +1,24 @@
 package com.qwlabs.lang;
 
+import com.google.common.collect.Maps;
+import com.google.common.collect.Streams;
+
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class C2 {
     private C2() {
@@ -104,4 +117,171 @@ public final class C2 {
         }
         return Optional.empty();
     }
+
+    public static <E> Stream<E> stream(Iterable<E> input) {
+        if (input == null) {
+            return Stream.empty();
+        }
+        return Streams.stream(input);
+    }
+
+    public static <E> Set<E> set(Iterable<E> input) {
+        return set(input, Function.identity());
+    }
+
+    public static <E, R> Set<R> set(Iterable<E> input, Function<E, R> mapper) {
+        return set(input, mapper, v -> true);
+    }
+
+    public static <E, R> Set<R> set(Iterable<E> input,
+                                    Function<E, R> mapper,
+                                    Predicate<? super R> filter) {
+        Objects.requireNonNull(mapper, "Mapper can not be null.");
+        Objects.requireNonNull(filter, "Filter can not be null.");
+        if (input == null) {
+            return Collections.emptySet();
+        }
+        return doSet(stream(input), mapper, filter);
+    }
+
+    public static <E, R> Set<R> set(Stream<E> input, Function<E, R> mapper) {
+        return set(input, mapper, v -> true);
+    }
+
+    public static <E, R> Set<R> set(Stream<E> input,
+                                    Function<E, R> mapper,
+                                    Predicate<? super R> filter) {
+        Objects.requireNonNull(mapper, "Mapper can not be null.");
+        Objects.requireNonNull(filter, "Filter can not be null.");
+        if (input == null) {
+            return Collections.emptySet();
+        }
+        return doSet(input, mapper, filter);
+    }
+
+    private static <E, R> Set<R> doSet(Stream<E> input,
+                                       Function<E, R> mapper,
+                                       Predicate<? super R> predicate) {
+        return input.map(mapper)
+                .filter(predicate)
+                .collect(Collectors.toSet());
+    }
+
+    public static <E> List<E> list(Iterable<E> input) {
+        return list(input, Function.identity());
+    }
+
+    public static <E, R> List<R> list(Iterable<E> input, Function<E, R> mapper) {
+        return list(input, mapper, v -> true);
+    }
+
+    public static <E, R> List<R> list(Iterable<E> input,
+                                      Function<E, R> mapper,
+                                      Predicate<? super R> filter) {
+        Objects.requireNonNull(mapper, "Mapper can not be null.");
+        Objects.requireNonNull(filter, "Filter can not be null.");
+        if (input == null) {
+            return Collections.emptyList();
+        }
+        return doList(Streams.stream(input), mapper, filter);
+    }
+
+    public static <E, R> List<R> list(Stream<E> input, Function<E, R> mapper) {
+        return list(input, mapper, v -> true);
+    }
+
+    public static <E, R> List<R> list(Stream<E> input,
+                                      Function<E, R> mapper,
+                                      Predicate<? super R> filter) {
+        Objects.requireNonNull(mapper, "Mapper can not be null.");
+        Objects.requireNonNull(filter, "Filter can not be null.");
+        if (input == null) {
+            return Collections.emptyList();
+        }
+        return doList(input, mapper, filter);
+    }
+
+    private static <E, R> List<R> doList(Stream<E> input,
+                                         Function<E, R> mapper,
+                                         Predicate<? super R> predicate) {
+        return input.map(mapper)
+                .filter(predicate)
+                .collect(Collectors.toList());
+    }
+
+    public static <E, K, V> Map<K, V> map(Iterable<E> input,
+                                          Function<? super E, ? extends K> keyMapper,
+                                          Supplier<V> valueSupplier,
+                                          BiConsumer<? super V, ? super E> mergeConsumer) {
+        Objects.requireNonNull(keyMapper, "key mapper can not be null.");
+        Objects.requireNonNull(valueSupplier, "value supplier can not be null.");
+        Objects.requireNonNull(mergeConsumer, "merge consumer can not be null.");
+        if (Objects.isNull(input)) {
+            return Collections.emptyMap();
+        }
+        Map<K, V> map = Maps.newHashMap();
+        Iterator<E> iterator = input.iterator();
+        while (iterator.hasNext()) {
+            E element = iterator.next();
+            K key = keyMapper.apply(element);
+            V value = map.computeIfAbsent(key, k -> valueSupplier.get());
+            mergeConsumer.accept(value, element);
+        }
+        return map;
+    }
+
+    public static <E, K, V> Map<K, V> map(Stream<E> input,
+                                          Function<? super E, ? extends K> keyMapper,
+                                          Function<? super E, ? extends V> valueMapper) {
+        return map(input, keyMapper, valueMapper, (v1, v2) -> v1);
+    }
+
+    public static <E, K, V> Map<K, V> map(Iterable<E> input,
+                                          Function<? super E, ? extends K> keyMapper,
+                                          Function<? super E, ? extends V> valueMapper) {
+        return map(input, keyMapper, valueMapper, (v1, v2) -> v1);
+    }
+
+    public static <E, K, V> Map<K, V> map(Iterable<E> input,
+                                          Function<? super E, ? extends K> keyMapper,
+                                          Function<? super E, ? extends V> valueMapper,
+                                          BinaryOperator<V> mergeFunction) {
+        return F2.ifPresent(input, () -> map(Streams.stream(input), keyMapper, valueMapper, mergeFunction));
+    }
+
+    public static <E, K, V> Map<K, V> map(Stream<E> input,
+                                          Function<? super E, ? extends K> keyMapper,
+                                          Function<? super E, ? extends V> valueMapper,
+                                          BinaryOperator<V> mergeFunction) {
+        Objects.requireNonNull(keyMapper, "key mapper can not be null.");
+        Objects.requireNonNull(valueMapper, "value mapper can not be null.");
+        Objects.requireNonNull(mergeFunction, "merge function can not be null.");
+        return F2.ifPresent(input,
+                () -> input.collect(Collectors.toMap(keyMapper, valueMapper, mergeFunction)),
+                Collections.emptyMap());
+    }
+
+    public static <E, K, V> Map<K, List<V>> listMap(Iterable<E> input,
+                                                    Function<? super E, ? extends K> keyMapper,
+                                                    Function<? super E, ? extends V> valueMapper) {
+        Objects.requireNonNull(keyMapper, "key mapper can not be null.");
+        Objects.requireNonNull(valueMapper, "value mapper can not be null.");
+        return F2.ifPresent(input,
+                () -> Streams.stream(input)
+                        .collect(Collectors.groupingBy(keyMapper,
+                                Collectors.mapping(valueMapper, Collectors.toList()))),
+                Collections.emptyMap());
+    }
+
+    public static <E, K, V> Map<K, Set<V>> setMap(Iterable<E> input,
+                                                  Function<? super E, ? extends K> keyMapper,
+                                                  Function<? super E, ? extends V> valueMapper) {
+        Objects.requireNonNull(keyMapper, "key mapper can not be null.");
+        Objects.requireNonNull(valueMapper, "value mapper can not be null.");
+        return F2.ifPresent(input,
+                () -> Streams.stream(input)
+                        .collect(Collectors.groupingBy(keyMapper, Collectors.mapping(valueMapper, Collectors.toSet()))),
+                Collections.emptyMap());
+    }
+
 }
