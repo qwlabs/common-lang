@@ -264,23 +264,38 @@ public final class C2 {
     public static <E, K, V> Map<K, List<V>> listMap(Iterable<E> input,
                                                     Function<? super E, ? extends K> keyMapper,
                                                     Function<? super E, ? extends V> valueMapper) {
+        return F2.ifPresent(input,
+                () -> listMap(Streams.stream(input), keyMapper, valueMapper),
+                Collections.emptyMap());
+    }
+
+    public static <E, K, V> Map<K, List<V>> listMap(Stream<E> input,
+                                                    Function<? super E, ? extends K> keyMapper,
+                                                    Function<? super E, ? extends V> valueMapper) {
         Objects.requireNonNull(keyMapper, "key mapper can not be null.");
         Objects.requireNonNull(valueMapper, "value mapper can not be null.");
         return F2.ifPresent(input,
-                () -> Streams.stream(input)
-                        .collect(Collectors.groupingBy(keyMapper,
-                                Collectors.mapping(valueMapper, Collectors.toList()))),
+                () -> input.collect(Collectors.groupingBy(keyMapper,
+                        Collectors.mapping(valueMapper, Collectors.toList()))),
                 Collections.emptyMap());
     }
 
     public static <E, K, V> Map<K, Set<V>> setMap(Iterable<E> input,
                                                   Function<? super E, ? extends K> keyMapper,
                                                   Function<? super E, ? extends V> valueMapper) {
+        return F2.ifPresent(input,
+                () -> setMap(Streams.stream(input), keyMapper, valueMapper),
+                Collections.emptyMap());
+    }
+
+    public static <E, K, V> Map<K, Set<V>> setMap(Stream<E> input,
+                                                  Function<? super E, ? extends K> keyMapper,
+                                                  Function<? super E, ? extends V> valueMapper) {
         Objects.requireNonNull(keyMapper, "key mapper can not be null.");
         Objects.requireNonNull(valueMapper, "value mapper can not be null.");
         return F2.ifPresent(input,
-                () -> Streams.stream(input)
-                        .collect(Collectors.groupingBy(keyMapper, Collectors.mapping(valueMapper, Collectors.toSet()))),
+                () -> input.collect(Collectors.groupingBy(keyMapper,
+                        Collectors.mapping(valueMapper, Collectors.toSet()))),
                 Collections.emptyMap());
     }
 
