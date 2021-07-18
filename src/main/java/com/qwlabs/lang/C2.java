@@ -5,6 +5,7 @@ import com.google.common.collect.Streams;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -167,6 +168,10 @@ public final class C2 {
                 .collect(Collectors.toSet());
     }
 
+    public static <E> List<E> list(Stream<E> input) {
+        return list(input, Function.identity());
+    }
+
     public static <E> List<E> list(Iterable<E> input) {
         return list(input, Function.identity());
     }
@@ -256,9 +261,22 @@ public final class C2 {
         Objects.requireNonNull(keyMapper, "key mapper can not be null.");
         Objects.requireNonNull(valueMapper, "value mapper can not be null.");
         Objects.requireNonNull(mergeFunction, "merge function can not be null.");
-        return F2.ifPresent(input,
-                () -> input.collect(Collectors.toMap(keyMapper, valueMapper, mergeFunction)),
-                Collections.emptyMap());
+        if (input == null) {
+            return Map.of();
+        }
+        Map<K, V> map = new HashMap<>();
+        input.forEach(element -> {
+            K key = keyMapper.apply(element);
+            if (key == null) {
+                return;
+            }
+            V value = valueMapper.apply(element);
+            if (value == null) {
+                return;
+            }
+            map.merge(key, value, mergeFunction);
+        });
+        return map;
     }
 
     public static <E, K, V> Map<K, List<V>> listMap(Iterable<E> input,
