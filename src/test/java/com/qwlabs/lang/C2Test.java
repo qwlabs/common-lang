@@ -303,9 +303,9 @@ class C2Test {
 
     @Test
     void should_map() {
-        Map<String, String> result1 = C2.map(Set.of("1", "2"), Function.identity(), v->null);
-        Map<String, String> result2 = C2.map(Set.of("1", "2"), Function.identity(), v->v+ "-");
-        Map<String, String> result3 = C2.map(List.of("1", "2", "1"), Function.identity(), v->v+ "-");
+        Map<String, String> result1 = C2.map(Set.of("1", "2"), Function.identity(), v -> null);
+        Map<String, String> result2 = C2.map(Set.of("1", "2"), Function.identity(), v -> v + "-");
+        Map<String, String> result3 = C2.map(List.of("1", "2", "1"), Function.identity(), v -> v + "-");
         assertThat(result1.size(), is(0));
 
         assertThat(result2.size(), is(2));
